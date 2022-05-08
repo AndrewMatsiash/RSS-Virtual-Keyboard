@@ -7,37 +7,112 @@
 body {
   padding: 0;
   margin: 0;
+  font-family: "Trebuchet MS", "Helvetica", sans-serif;
 }
 
 .keyboard__wrapper {
+  background-image: url(./p.jpg);
+  background-repeat: no-repeat;
+  background-size: cover;
+  /* background-position: top; */
   width: 100%;
   height: 100vh;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: end;
   align-items: center;
+  padding: 100px 0;
 }
 
 .keyboard__body {
+  background-color: transparent;
   width: 854px;
-  border: 2px solid black;
+  border: 0px solid black;
   padding: 5px;
+  display: flex;
+  flex-wrap: wrap;
+  border-radius: 9px;
 }
 
 .use-keyboard-input {
+  background-color: transparent;
   display: inline-block;
   margin: 0 auto;
-  width: 500px;
+  width: 700px;
   margin-bottom: 150px;
+  color: #ffffff;
+  font-weight: 800;
+  font-family: "Trebuchet MS", "Helvetica", sans-serif;
+  font-size: 30px;
+  border: none;
+
+
 }
+
+textarea:focus, input:focus {
+  outline: none;
+}
+
+
 
 .k-key {
   min-width: 50px;
   height: 50px;
-  border: 1px solid black;
   margin: 3px;
-  padding: 3px;
-  float: left;
+  /* padding: 3px; */
+  text-align: center;
+  line-height: 40px;
+  cursor: pointer;
+  text-shadow:
+    -1px -1px #000,
+    0 1px 0 #444;
+  color: #1A1A1A;
+  font-weight: 800;
+  font-family: "Trebuchet MS", "Helvetica", sans-serif;
+  background-color: rgb(245, 239, 239);
+  background-image: -webkit-gradient(linear, left top, left bottom, from(rgba(255, 255, 255, 1)), to(rgba(255, 255, 255, 0)));
+  background-image: -webkit-linear-gradient(top, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+  background-image: -moz-linear-gradient(top, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+  background-image: -ms-linear-gradient(top, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+  background-image: -o-linear-gradient(top, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+  background-image: linear-gradient(top, rgba(255, 255, 255, 1), rgba(255, 255, 255, 0));
+
+  -webkit-transition: background-color .2s ease-out;
+  -moz-transition: background-color .2s ease-out;
+  -ms-transition: background-color .2s ease-out;
+  -o-transition: background-color .2s ease-out;
+  transition: background-color .2s ease-out;
+  background-clip: padding-box;
+  /* Fix bleeding */
+  -moz-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  -moz-box-shadow: 0 1px 0 rgba(0, 0, 0, .3), 0 2px 2px -1px rgba(0, 0, 0, .5), 0 1px 0 rgba(255, 255, 255, .3) inset;
+  -webkit-box-shadow: 0 1px 0 rgba(0, 0, 0, .3), 0 2px 2px -1px rgba(0, 0, 0, .5), 0 1px 0 rgba(255, 255, 255, .3) inset;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, .3), 0 2px 2px -1px rgba(0, 0, 0, .5), 0 1px 0 rgba(255, 255, 255, .3) inset;
+  text-shadow: 0 1px 0 rgba(255, 255, 255, .9);
+
+  /* -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none; */
+}
+
+.k-key:hover {
+  background-color: #eee;
+  color: #555;
+}
+
+.k-key:active {
+  background: #e9e9e9;
+  position: relative;
+  top: 1px;
+  text-shadow: none;
+  -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, .3) inset;
+  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .3) inset;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, .3) inset;
 }
 
 .active {
@@ -45,21 +120,25 @@ body {
 }
 
 .Backspace {
-  width: 105px;
+  width: 106px;
 }
 
 .Enter {
-  width: 138px;
+  width: 132px;
 }
 
 .ShiftLeft {
-  width: 96px;
+  width: 105px;
 }
+
 .ShiftRight {
-  width: 115px;
+  width: 106px;
 }
 
 .Space {
-  width: 371px;
+  width: 384px;
 }
 
+.CapsLock{
+width: 80px;
+}

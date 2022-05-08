@@ -296,12 +296,12 @@ let keyboard = [
     class: "other-btn",
   },
   {
-    key: "Control",
+    key: "Ctrl",
     code: "ControlLeft",
     class: "other-btn",
   },
   {
-    key: "Meta",
+    key: "Win",
     code: "MetaLeft",
     class: "other-btn",
   },
@@ -333,12 +333,12 @@ let keyboard = [
     code: "ArrowRight",
   },
   {
-    key: "Control",
+    key: "Ctrl",
     code: "ControlRight",
     class: "other-btn",
   },
 ];
-
+// textArea.focus()
 //found element
 let body = document.querySelector(".body");
 
@@ -391,21 +391,36 @@ let textAreaValue = textArea.value;
 document.onkeydown = (event) => {
   textArea.focus();
   console.log(event);
-  if (event.code === "Tab") {
+   if (event.code === "Tab") {
     event.preventDefault();
+     Tab()
+  }
+  if (event.code === 'AltLeft' || event.code === 'AltRight') {
+    event.preventDefault();
+  }
+   if (event.code === "CapsLock") {
+    event.preventDefault();
+      CapsLock()
+  }
+   if (event.code === "ShiftLeft" || event.code === "ShiftRight") {
+    event.preventDefault();
+      shiftDown()
   }
   console.log(event.code);
   document.querySelectorAll(`.k-key`).forEach((element) => {
     element.classList.remove("active");
   });
   document.querySelector(`.k-key[data =${event.code}]`).classList.add("active");
-  textArea.textContent += event.key;
 };
 
 document.onkeyup = (event) => {
   document.querySelectorAll(`.k-key`).forEach((element) => {
     element.classList.remove("active");
   });
+  if (event.code === "ShiftLeft" || event.code === "ShiftRight") {
+    event.preventDefault();
+    shiftUp()
+  }
 };
 
 //I hang the listener on the keys on click mouse
@@ -435,7 +450,7 @@ keyboardBody.addEventListener("mouseout", (event) => {
 function pushSimvolTextarea() {
   textArea.focus();
   let currentPos = getCaret(textArea);
-if (currentPos === textArea.value.length) {
+  if (currentPos === textArea.value.length || currentPos === 0) {
   textArea.value += event.target.textContent;
 }else{
 console.log(getCaret(textArea));
@@ -443,7 +458,6 @@ console.log(getCaret(textArea));
   let backSpace = text.substr(0, currentPos) + event.target.textContent + text.substr(currentPos, text.length);
   textArea.value = backSpace;
   resetCursor(textArea, currentPos + 1);
- 
 }
   
 }
@@ -453,8 +467,6 @@ kKeysSimvol.forEach((element) => {
 });
 
 
-
-//add events to character keys
 let flag = false; //flag capsLock
 otherKeys.forEach((element) => {
   if (element.classList.contains("Backspace")) {
@@ -479,7 +491,7 @@ otherKeys.forEach((element) => {
   if (element.classList.contains("CapsLock")) {
     element.addEventListener("click", CapsLock);
   }
-  if (element.classList.contains("ShiftLeft")) {
+  if (element.classList.contains("ShiftLeft") || element.classList.contains("ShiftRight") ) {
     element.addEventListener("mouseup", shiftUp);
     element.addEventListener("mousedown", shiftDown);
   }
@@ -499,14 +511,17 @@ function Backspace() {
 }
 
 function SpaceText() {
+  textArea.focus();
   let currentPos = getCaret(textArea);
-  console.log(getCaret(textArea));
-  let text = textArea.value;
-  let space = " ";
-  let Space = text + space;
-  textArea.value = Space;
-  resetCursor(textArea, currentPos + 1);
-}
+  console.log(currentPos);
+  if (currentPos === textArea.value.length || currentPos === 0) {
+    textArea.value += " ";
+  } else {
+    let text = textArea.value;
+    let tab = text.substr(0, currentPos) + " " + text.substr(currentPos, text.length);
+    textArea.value = tab;
+    resetCursor(textArea, currentPos + 1);
+}}
 
 function Delete() {
   let currentPos = getCaret(textArea);
@@ -520,29 +535,29 @@ function Delete() {
 function Enter() {
   textArea.focus();
   let currentPos = getCaret(textArea);
-  let text = textArea.value;
-
-  if (currentPos === text.length) {
+  console.log(currentPos);
+  if (currentPos === textArea.value.length || currentPos === 0) {
     textArea.value += "\r\n";
-  }
-  if (currentPos < text.length) {
-    text2 = text.substr(0, currentPos - 1) +
-      "\r\n" +
-      text.substr(currentPos, text.length);
-    textArea.value = text2;
-    resetCursor(textArea, currentPos);
+  } else {
+    let text = textArea.value;
+    let tab = text.substr(0, currentPos) + "\r\n" + text.substr(currentPos, text.length);
+    textArea.value = tab;
+    resetCursor(textArea, currentPos + 1);
   }
 }
 
 function Tab() {
+  textArea.focus();
   let currentPos = getCaret(textArea);
-  console.log(getCaret(textArea));
-  let text = textArea.value;
-  let tabSimvol = "\t";
-  let Tab = text + tabSimvol;
-  textArea.value = Tab;
-  resetCursor(textArea, currentPos + 1);
-}
+  console.log(currentPos);
+  if (currentPos === textArea.value.length || currentPos === 0 ) {
+    textArea.value += "\t";
+  } else {
+    let text = textArea.value;
+    let tab = text.substr(0, currentPos) + "\t" + text.substr(currentPos, text.length);
+    textArea.value = tab;
+    resetCursor(textArea, currentPos + 1);
+}}
 
 function CapsLock() {
   if (flag == false) {
@@ -713,13 +728,4 @@ function resetCursor(txtElement, currentPos) {
     range.select();
   }
 }
-
-let currentPos;
-// textArea.addEventListener('click',getCaret)
-textArea.addEventListener('click',(event)=>{
-  let currentPos = getCaret(textArea);
-  console.log(getCaret(textArea));
-  textArea.focus();
- 
-})
 
