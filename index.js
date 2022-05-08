@@ -409,17 +409,19 @@ document.onkeyup = (event) => {
 };
 
 //I hang the listener on the keys on click mouse
-keyboardBody.addEventListener("mouseup", (event) => {
-  if (event.target.classList.contains("k-key")) {
-    event.target.classList.remove("active");
-  }
-});
 
 keyboardBody.addEventListener("mousedown", (event) => {
   if (event.target.closest(".k-key")) {
     event.target.classList.add("active");
   }
 });
+
+keyboardBody.addEventListener("mouseup", (event) => {
+  if (event.target.classList.contains("k-key")) {
+    event.target.classList.remove("active");
+  }
+});
+
 
 keyboardBody.addEventListener("mouseout", (event) => {
   if (event.target.closest(".k-key")) {
@@ -432,16 +434,26 @@ keyboardBody.addEventListener("mouseout", (event) => {
 
 function pushSimvolTextarea() {
   textArea.focus();
+  let currentPos = getCaret(textArea);
+if (currentPos === textArea.value.length) {
   textArea.value += event.target.textContent;
+}else{
+console.log(getCaret(textArea));
+  let text = textArea.value;
+  let backSpace = text.substr(0, currentPos) + event.target.textContent + text.substr(currentPos, text.length);
+  textArea.value = backSpace;
+  resetCursor(textArea, currentPos + 1);
+ 
+}
+  
 }
 
 kKeysSimvol.forEach((element) => {
   element.addEventListener("click", pushSimvolTextarea);
 });
 
-//   textArea.focus()
-// textArea.value = el.innerText
-// })
+
+
 //add events to character keys
 let flag = false; //flag capsLock
 otherKeys.forEach((element) => {
@@ -473,37 +485,6 @@ otherKeys.forEach((element) => {
   }
 });
 
-function getCaret(el) {
-  if (el.selectionStart) {
-    return el.selectionStart;
-  } else if (document.selection) {
-    el.focus();
-
-    let r = document.selection.createRange();
-    if (r == null) {
-      return 0;
-    }
-
-    let re = el.createTextRange(),
-      rc = re.duplicate();
-    re.moveToBookmark(r.getBookmark());
-    rc.setEndPoint("EndToStart", re);
-
-    return rc.text.length;
-  }
-  return 0;
-}
-
-function resetCursor(txtElement, currentPos) {
-  if (txtElement.setSelectionRange) {
-    txtElement.focus();
-    txtElement.setSelectionRange(currentPos, currentPos);
-  } else if (txtElement.createTextRange) {
-    var range = txtElement.createTextRange();
-    range.moveStart("character", currentPos);
-    range.select();
-  }
-}
 
 function Backspace() {
   let currentPos = getCaret(textArea);
@@ -577,8 +558,6 @@ function CapsLock() {
   }
 }
 
-let flaglang = false;
-
 const allElemShiftUp = document.querySelectorAll('.shiftUp')
 let arrayKeyShiftUp = [];
 function sortArrayToKeyShiftUp() {
@@ -645,17 +624,29 @@ function langEng() {
   }
 }
 
+let flaglang = JSON.parse(localStorage.getItem("lang"));
+function localStorageLang() {
+  if (flaglang === true) {
+    langRu()
+  } else {
+    langEng()
+  }
+}
+localStorageLang()
 
 
 function langToggle() {
   if (flaglang == true) {
     langEng();
     flaglang = false;
+    localStorage.setItem("lang", JSON.stringify(flaglang))
   } else {
     langRu();
     flaglang = true;
+    localStorage.setItem("lang", JSON.stringify(flaglang))
   }
 }
+
 
 function runOnKeys(func, ...codes) {
   let pressed = new Set();
@@ -690,3 +681,45 @@ runOnKeys(
   'ControlLeft',
   'AltLeft'
 );
+
+function getCaret(el) {
+  if (el.selectionStart) {
+    return el.selectionStart;
+  } else if (document.selection) {
+    el.focus();
+
+    let r = document.selection.createRange();
+    if (r == null) {
+      return 0;
+    }
+
+    let re = el.createTextRange(),
+      rc = re.duplicate();
+    re.moveToBookmark(r.getBookmark());
+    rc.setEndPoint("EndToStart", re);
+
+    return rc.text.length;
+  }
+  return 0;
+}
+
+function resetCursor(txtElement, currentPos) {
+  if (txtElement.setSelectionRange) {
+    txtElement.focus();
+    txtElement.setSelectionRange(currentPos, currentPos);
+  } else if (txtElement.createTextRange) {
+    var range = txtElement.createTextRange();
+    range.moveStart("character", currentPos);
+    range.select();
+  }
+}
+
+let currentPos;
+// textArea.addEventListener('click',getCaret)
+textArea.addEventListener('click',(event)=>{
+  let currentPos = getCaret(textArea);
+  console.log(getCaret(textArea));
+  textArea.focus();
+ 
+})
+
