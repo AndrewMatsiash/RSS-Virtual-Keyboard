@@ -283,6 +283,7 @@ let keyboard = [
   {
     key: "/",
     keyRu: ".",
+    shiftUpRu: ",",
     code: "Slash",
     shiftUp: "?"
   },
@@ -361,10 +362,10 @@ keyboardBody.classList.add("keyboard__body");
 //created element div class = 'message'
 let message = document.createElement("div");
 message.classList.add("message");
-message.innerText = 
-'Клавиатура создана в операционной системе Windows \n Для переключения языка комбинация: левыe ctrl + alt'
+message.innerText =
+  'Клавиатура создана в операционной системе Windows \n Для переключения языка комбинация: левыe ctrl + alt'
 //added an element to the end of an element keyboardWrapper
-keyboardWrapper.append(textArea, keyboardBody,message);
+keyboardWrapper.append(textArea, keyboardBody, message);
 
 //function creates div class = 'k-key and keys.code' + data-atribute
 //added element to the keyboardBody
@@ -393,165 +394,53 @@ const allKeys = document.querySelectorAll(".k-key");
 const otherKeys = document.querySelectorAll(".other-btn");
 let textAreaValue = textArea.value;
 
-//I hang the listener on the document on pressing on the keyboard
-document.onkeydown = (event) => {
-  textArea.focus();
-  console.log(event);
-  if (event.code === "Tab") {
-    event.preventDefault();
-    Tab()
-  }
-  if (event.code === 'AltLeft' || event.code === 'AltRight') {
-    event.preventDefault();
-  }
-  if (event.code === "CapsLock") {
-    event.preventDefault();
-    CapsLock()
-  }
-  if (event.code === "ShiftLeft" || event.code === "ShiftRight") {
-    event.preventDefault();
-    shiftDown()
-  }
-  console.log(event.code);
-  document.querySelectorAll(`.k-key`).forEach((element) => {
-    element.classList.remove("active");
-  });
-  document.querySelector(`.k-key[data =${event.code}]`).classList.add("active");
-};
 
-document.onkeyup = (event) => {
-  document.querySelectorAll(`.k-key`).forEach((element) => {
-    element.classList.remove("active");
-  });
-  if (event.code === "ShiftLeft" || event.code === "ShiftRight") {
-    event.preventDefault();
-    shiftUp()
-  }
-};
-
-//I hang the listener on the keys on click mouse
-
-keyboardBody.addEventListener("mousedown", (event) => {
-  if (event.target.closest(".k-key")) {
-    event.target.classList.add("active");
-  }
-});
-
-keyboardBody.addEventListener("mouseup", (event) => {
-  if (event.target.classList.contains("k-key")) {
-    event.target.classList.remove("active");
-  }
-});
-
-
-keyboardBody.addEventListener("mouseout", (event) => {
-  if (event.target.closest(".k-key")) {
-    event.target.classList.remove("active");
-  }
-});
-
-
-
-
-function pushSimvolTextarea() {
+const createsTextFromTheCursor = function (key) {
   textArea.focus();
   let currentPos = getCaret(textArea);
-  if (currentPos === textArea.value.length || currentPos === 0) {
-    textArea.value += event.target.textContent;
-  } else {
-    console.log(getCaret(textArea));
-    let text = textArea.value;
-    let backSpace = text.substr(0, currentPos) + event.target.textContent + text.substr(currentPos, text.length);
-    textArea.value = backSpace;
-    resetCursor(textArea, currentPos + 1);
-  }
-
-}
-
-kKeysSimvol.forEach((element) => {
-  element.addEventListener("click", pushSimvolTextarea);
-});
-
-
-let flag = false; //flag capsLock
-otherKeys.forEach((element) => {
-  if (element.classList.contains("Backspace")) {
-    element.addEventListener("click", Backspace);
-  }
-  if (element.classList.contains("Space")) {
-    element.addEventListener("click", SpaceText);
-  }
-
-  if (element.classList.contains("Delete")) {
-    element.addEventListener("click", Delete);
-  }
-
-  if (element.classList.contains("Enter")) {
-    element.addEventListener("click", Enter);
-  }
-
-  if (element.classList.contains("Tab")) {
-    element.addEventListener("click", Tab);
-  }
-
-  if (element.classList.contains("CapsLock")) {
-    element.addEventListener("click", CapsLock);
-  }
-  if (element.classList.contains("ShiftLeft") || element.classList.contains("ShiftRight")) {
-    element.addEventListener("mouseup", shiftUp);
-    element.addEventListener("mousedown", shiftDown);
-  }
-});
-
-
-function Backspace() {
-  let currentPos = getCaret(textArea);
-  console.log(getCaret(textArea));
-  let text = textArea.value;
-  let backSpace = text.substr(0, currentPos - 1) + text.substr(currentPos, text.length);
-  textArea.value = backSpace;
-  resetCursor(textArea, currentPos - 1);
-}
-
-function createsTextFromTheCursor(key){
-  textArea.focus();
-  let currentPos = getCaret(textArea);
-  console.log(currentPos);
   if (currentPos === textArea.value.length) {
     textArea.value += key;
   } else {
-    let text= textArea.value;
+    let text = textArea.value;
     let newText = text.substr(0, currentPos) + key + text.substr(currentPos, text.length);
     textArea.value = newText;
     resetCursor(textArea, currentPos + 1);
   }
 }
 
-function SpaceText() {
+
+const backSpace = function () {
+  let currentPos = getCaret(textArea);
+  let text = textArea.value;
+  let backSpace = text.substr(0, currentPos - 1) + text.substr(currentPos, text.length);
+  textArea.value = backSpace;
+  resetCursor(textArea, currentPos - 1);
+}
+
+const spaceText = function () {
   let space = " "
   createsTextFromTheCursor(space)
 }
 
-function Delete() {
+const del = function () {
   let currentPos = getCaret(textArea);
-  console.log(getCaret(textArea));
   let text = textArea.value;
   let backSpace = text.substr(0, currentPos) + text.substr(currentPos + 1, text.length);
   textArea.value = backSpace;
   resetCursor(textArea, currentPos);
 }
 
-function Enter() {
+const enter = function () {
   let enter = "\r\n"
   createsTextFromTheCursor(enter)
 }
 
-function Tab() {
+const tab = function () {
   let tab = "\t"
-createsTextFromTheCursor(tab)
+  createsTextFromTheCursor(tab)
 }
 
-function CapsLock() {
+const capsLock = function () {
   if (flag == false) {
     kKeysSimvol.forEach((el) => {
       el.textContent = el.textContent.toUpperCase();
@@ -567,7 +456,8 @@ function CapsLock() {
 
 const allElemShiftUp = document.querySelectorAll('.shiftUp')
 let arrayKeyShiftUp = [];
-function sortArrayToKeyShiftUp() {
+
+const sortArrayToKeyShiftUp = function () {
   for (let i = 0; i < keyboard.length; i++) {
     if (keyboard[i].shiftUp !== undefined) {
       arrayKeyShiftUp.push(keyboard[i])
@@ -576,12 +466,13 @@ function sortArrayToKeyShiftUp() {
 }
 sortArrayToKeyShiftUp()
 
-function shiftUp() {
+const shiftUp = function () {
   if (flaglang == true) {
     allElemShiftUp[0].textContent = arrayKeyShiftUp[0].keyRu;
-    for (let i = 1; i < arrayKeyShiftUp.length; i++) {
+    for (let i = 1; i < 13; i++) {
       allElemShiftUp[i].textContent = arrayKeyShiftUp[i].key;
     }
+    allElemShiftUp[20].textContent = arrayKeyShiftUp[20].keyRu;
     kKeysSimvol.forEach((el) => {
       el.textContent = el.textContent.toLowerCase();
     });
@@ -595,12 +486,13 @@ function shiftUp() {
   }
 };
 
-function shiftDown() {
+const shiftDown = function () {
   if (flaglang == true) {
     allElemShiftUp[0].textContent = arrayKeyShiftUp[0].keyRu;
-    for (let i = 1; i < arrayKeyShiftUp.length; i++) {
+    for (let i = 1; i < 13; i++) {
       allElemShiftUp[i].textContent = arrayKeyShiftUp[i].shiftUp;
     }
+    allElemShiftUp[20].textContent = arrayKeyShiftUp[20].shiftUpRu;
     kKeysSimvol.forEach((el) => {
       el.textContent = el.textContent.toUpperCase();
     });
@@ -615,7 +507,7 @@ function shiftDown() {
 };
 
 
-function langRu() {
+const langRu = function () {
   for (let i = 0; i < keyboard.length; i++) {
     if (keyboard[i].keyRu === undefined) {
       allKeys[i].textContent = keyboard[i].key;
@@ -625,14 +517,14 @@ function langRu() {
   }
 }
 
-function langEng() {
+const langEng = function () {
   for (let i = 0; i < keyboard.length; i++) {
     allKeys[i].textContent = keyboard[i].key;
   }
 }
 
 let flaglang = JSON.parse(localStorage.getItem("lang"));
-function localStorageLang() {
+const localStorageLang = function () {
   if (flaglang === true) {
     langRu()
   } else {
@@ -642,7 +534,7 @@ function localStorageLang() {
 localStorageLang()
 
 
-function langToggle() {
+const langToggle = function () {
   if (flaglang == true) {
     langEng();
     flaglang = false;
@@ -667,9 +559,7 @@ function runOnKeys(func, ...codes) {
         return;
       }
     }
-
     // да, все
-
     // во время показа alert, если посетитель отпустит клавиши - не возникнет keyup
     // при этом JavaScript "пропустит" факт отпускания клавиш, а pressed[keyCode] останется true
     // чтобы избежать "залипания" клавиши -- обнуляем статус всех клавиш, пусть нажимает всё заново
@@ -720,4 +610,116 @@ function resetCursor(txtElement, currentPos) {
     range.select();
   }
 }
+
+
+//I hang the listener on the document on pressing on the keyboard
+document.onkeydown = (event) => {
+  textArea.focus();
+  if (event.code === "Tab") {
+    event.preventDefault();
+    tab()
+  }
+
+  if (event.code === 'AltLeft' || event.code === 'AltRight') {
+    event.preventDefault();
+  }
+
+  if (event.code === "CapsLock") {
+    event.preventDefault();
+    capsLock()
+  }
+
+  if (event.code === "ShiftLeft" || event.code === "ShiftRight") {
+    event.preventDefault();
+    shiftDown()
+  }
+
+  document.querySelectorAll(`.k-key`).forEach((element) => {
+    element.classList.remove("active");
+  });
+  document.querySelector(`.k-key[data =${event.code}]`).classList.add("active");
+};
+
+document.onkeyup = (event) => {
+  document.querySelectorAll(`.k-key`).forEach((element) => {
+    element.classList.remove("active");
+  });
+  if (event.code === "ShiftLeft" || event.code === "ShiftRight") {
+    event.preventDefault();
+    shiftUp()
+  }
+};
+
+//I hang the listener on the keys on click mouse
+
+keyboardBody.addEventListener("mousedown", (event) => {
+  if (event.target.closest(".k-key")) {
+    event.target.classList.add("active");
+  }
+});
+
+keyboardBody.addEventListener("mouseup", (event) => {
+  if (event.target.classList.contains("k-key")) {
+    event.target.classList.remove("active");
+  }
+});
+
+
+keyboardBody.addEventListener("mouseout", (event) => {
+  if (event.target.closest(".k-key")) {
+    event.target.classList.remove("active");
+  }
+});
+
+
+
+
+function pushSimvolTextarea() {
+  textArea.focus();
+  let currentPos = getCaret(textArea);
+  if (currentPos === textArea.value.length || currentPos === 0) {
+    textArea.value += event.target.textContent;
+  } else {
+    let text = textArea.value;
+    let backSpace = text.substr(0, currentPos) + event.target.textContent + text.substr(currentPos, text.length);
+    textArea.value = backSpace;
+    resetCursor(textArea, currentPos + 1);
+  }
+
+}
+
+kKeysSimvol.forEach((element) => {
+  element.addEventListener("click", pushSimvolTextarea);
+});
+
+
+let flag = false; //flag capsLock
+otherKeys.forEach((element) => {
+  if (element.classList.contains("Backspace")) {
+    element.addEventListener("click", backSpace);
+  }
+  if (element.classList.contains("Space")) {
+    element.addEventListener("click", spaceText);
+  }
+
+  if (element.classList.contains("Delete")) {
+    element.addEventListener("click", del);
+  }
+
+  if (element.classList.contains("Enter")) {
+    element.addEventListener("click", enter);
+  }
+
+  if (element.classList.contains("Tab")) {
+    element.addEventListener("click", tab);
+  }
+
+  if (element.classList.contains("CapsLock")) {
+    element.addEventListener("click", capsLock);
+  }
+  if (element.classList.contains("ShiftLeft") || element.classList.contains("ShiftRight")) {
+    element.addEventListener("mouseup", shiftUp);
+    element.addEventListener("mousedown", shiftDown);
+  }
+});
 
